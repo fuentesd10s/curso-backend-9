@@ -1,10 +1,36 @@
-# API de Servicios y Reservas
+# Sistema Backend de Turnos y Reservas
 
-API del Sistema Backend de Turnos y Reservas, hecha con Node.js, Express (ESM), MongoDB Atlas y Mongoose. Gestiona los recursos `services` y `bookings` y define el modelo `messages`. Los datos se guardan en colecciones de MongoDB.
+Entrega final del curso de Backend. API del Sistema Backend de Turnos y Reservas, hecha con Node.js, Express (ESM), MongoDB Atlas y Mongoose. Gestiona los recursos `services` y `bookings` y define el modelo `messages`. Los datos se guardan en colecciones de MongoDB.
 
 La API acepta filtros, paginación y ordenamiento en el listado de servicios, valida todos los datos de entrada con **Zod** antes de llegar a la base y devuelve las reservas con los datos completos de sus servicios usando `populate`.
 
 Además de la API REST, incluye vistas renderizadas en el servidor con **Handlebars** y actualizaciones en tiempo real con **Socket.io**: cuando se crea o modifica un servicio o una reserva, las vistas abiertas se actualizan sin recargar la página.
+
+## Requisitos de la entrega
+
+| Requisito | Dónde se cumple |
+|-----------|-----------------|
+| CRUD completo de servicios | `GET`, `POST`, `PUT` y `DELETE` en `/api/services` ([Recurso `services`](#recurso-services)). |
+| Crear y consultar reservas, y asociarles servicios | `POST /api/bookings`, `GET /api/bookings/:bid` y `POST /api/bookings/:bid/services/:sid` ([Recurso `bookings`](#recurso-bookings)). |
+| Las reservas guardan `ObjectId` y `quantity`, nunca el objeto completo | `src/models/booking.model.js`: `services: [{ service: ObjectId, quantity }]`. |
+| Filtros, paginación y ordenamiento por query params | `GET /api/services?category=&available=&page=&limit=&sortBy=&order=` ([detalle](#filtros-paginación-y-ordenamiento)). |
+| Reservas con los datos completos de sus servicios (`populate`) | `GET /api/bookings/:bid` ([ejemplo](#consultar-una-reserva-con-sus-servicios-completos)). |
+| Validación con Zod antes de llegar a la base | `src/validations` + middleware `src/middlewares/validate.js` ([Validaciones](#validaciones-zod)). |
+| Vista con Handlebars | `/views/services` y `/views/bookings` ([Vistas](#vistas-handlebars)). |
+| Tiempo real con Socket.io | Las vistas se actualizan solas al crear o modificar servicios y reservas ([Tiempo real](#tiempo-real-socketio)). |
+| MongoDB Atlas + Mongoose en capas | `routes → controllers → services → repositories → DAO → models` ([Arquitectura](#arquitectura-en-capas)). |
+| Configuración con `.env`, `.env.example` incluido, sin credenciales | `src/config/env.config.js` valida las variables; `.env` y `node_modules` están en `.gitignore`. |
+
+## Inicio rápido
+
+```bash
+npm install
+cp .env.example .env      # completar MONGO_URI (en PowerShell: copy .env.example .env)
+npm run seed              # opcional: carga 4 servicios de ejemplo
+npm start
+```
+
+Después abrí `http://localhost:8080`, que redirige a la vista de servicios.
 
 ## Instalación
 
@@ -34,11 +60,20 @@ El archivo `.env` no se sube al repositorio (está en `.gitignore`, igual que `n
 
 ## Ejecución
 
-```bash
-npm start
-```
+| Script          | Qué hace |
+|-----------------|----------|
+| `npm start`     | Levanta el servidor. |
+| `npm run dev`   | Levanta el servidor y lo reinicia al guardar cambios (`node --watch`). |
+| `npm run seed`  | Carga 4 servicios de ejemplo. Solo inserta si la colección está vacía, así que no duplica ni pisa datos. |
 
 El servidor se conecta a MongoDB y después corre en `http://localhost:8080`. Si no puede conectarse, no arranca y muestra el error.
+
+| URL                                    | Qué es |
+|----------------------------------------|--------|
+| `http://localhost:8080/`               | Redirige a `/views/services`. |
+| `http://localhost:8080/views/services`  | Vista de servicios (en tiempo real). |
+| `http://localhost:8080/views/bookings`  | Vista de reservas (en tiempo real). |
+| `http://localhost:8080/api/...`         | API REST. |
 
 ## Variables de entorno
 
@@ -140,8 +175,10 @@ src/
   dao/                         services.dao.js, bookings.dao.js
   validations/                 services.validation.js, bookings.validation.js, common.validation.js (esquemas de Zod)
   middlewares/validate.js      Middleware que aplica un esquema de Zod a body, params o query
+  middlewares/notFound.js      Responde 404 para las rutas que no existen
   middlewares/errorHandler.js  Manejo central de errores
   errors/AppError.js           Error con código HTTP
+  scripts/seed.js              Carga servicios de ejemplo (npm run seed)
   sockets/socket.js            Inicia Socket.io y emite eventos
   sockets/notifier.js          Avisa a los clientes cuando cambian servicios o reservas
   views/
@@ -336,7 +373,7 @@ Los schemas de Mongoose mantienen sus propias reglas (`required`, `min`, `enum`)
 Todas las respuestas de error tienen la forma `{ "error": "mensaje" }`. Los errores de validación agregan `details` con el campo y el mensaje de cada problema.
 
 - `400`: datos inválidos según Zod (campos faltantes, tipos incorrectos, query params inválidos o un id sin formato de `ObjectId`) o un body que no es JSON válido.
-- `404`: el servicio o la reserva no existe (el id tiene formato válido, pero no está en la base).
+- `404`: el servicio o la reserva no existe (el id tiene formato válido, pero no está en la base), o la ruta no existe.
 - `500`: error interno, por ejemplo una falla de conexión con MongoDB.
 
 ## Ejemplos
