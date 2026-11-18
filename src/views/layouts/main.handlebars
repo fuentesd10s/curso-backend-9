@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}} | Turnos y Reservas</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body data-page="{{page}}">
+  <header class="header">
+    <h1>Turnos y Reservas</h1>
+    <nav>
+      <a href="/views/services" class="{{#if (eq page 'services')}}active{{/if}}">Servicios</a>
+      <a href="/views/bookings" class="{{#if (eq page 'bookings')}}active{{/if}}">Reservas</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    {{{body}}}
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/socket.js"></script>
+</body>
+</html>

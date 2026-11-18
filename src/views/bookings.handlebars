@@ -1,0 +1,49 @@
+<div class="toolbar">
+  <h2>Reservas</h2>
+  <span id="live-status" class="live">Conectando…</span>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Email</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Estado</th>
+        <th>Servicios</th>
+      </tr>
+    </thead>
+    <tbody id="bookings-body">
+      {{#each bookings}}
+        <tr data-id="{{id}}">
+          <td>{{clientName}}</td>
+          <td>{{clientEmail}}</td>
+          <td>{{date}}</td>
+          <td>{{time}}</td>
+          <td><span class="badge status">{{status}}</span></td>
+          <td>
+            {{#if services.length}}
+              <ul class="items">
+                {{#each services}}
+                  {{#if service}}
+                    <li>{{service.name}} × {{quantity}} ({{price service.price}} c/u)</li>
+                  {{else}}
+                    <li>Servicio eliminado × {{quantity}}</li>
+                  {{/if}}
+                {{/each}}
+              </ul>
+            {{else}}
+              Sin servicios
+            {{/if}}
+          </td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="6" class="empty">Todavía no hay reservas.</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

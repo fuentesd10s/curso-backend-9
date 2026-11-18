@@ -1,0 +1,199 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: #f5f6f8;
+  color: #1f2933;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 16px 24px;
+  background: #1f2933;
+  color: #fff;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.header nav a {
+  margin-left: 16px;
+  color: #cbd2d9;
+  text-decoration: none;
+}
+
+.header nav a.active,
+.header nav a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.live {
+  font-size: 0.85rem;
+  color: #52606d;
+}
+
+.live::before {
+  content: "●";
+  margin-right: 6px;
+  color: #9aa5b1;
+}
+
+.live.online::before {
+  color: #2f9e44;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e4e7eb;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f0f2f5;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.badge.yes {
+  background: #d3f9d8;
+  color: #2b8a3e;
+}
+
+.badge.no {
+  background: #ffe3e3;
+  color: #c92a2a;
+}
+
+.badge.status {
+  background: #e7f5ff;
+  color: #1864ab;
+}
+
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: #52606d;
+}
+
+.card {
+  margin-top: 24px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+}
+
+.form-grid input {
+  padding: 8px;
+  border: 1px solid #cbd2d9;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.form-grid .checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #1f2933;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+button.small {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  background: #52606d;
+}
+
+.form-message {
+  min-height: 1.2em;
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  color: #c92a2a;
+}
+
+ul.items {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.highlight {
+  animation: highlight 1.5s ease-out;
+}
+
+@keyframes highlight {
+  from {
+    background: #fff3bf;
+  }
+  to {
+    background: transparent;
+  }
+}

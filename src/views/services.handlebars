@@ -1,0 +1,59 @@
+<div class="toolbar">
+  <h2>Servicios</h2>
+  <span id="live-status" class="live">Conectando…</span>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Duración</th>
+        <th>Precio</th>
+        <th>Categoría</th>
+        <th>Disponibilidad</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="services-body">
+      {{#each services}}
+        <tr data-id="{{id}}">
+          <td>{{name}}</td>
+          <td>{{description}}</td>
+          <td>{{duration}} min</td>
+          <td>{{price price}}</td>
+          <td>{{category}}</td>
+          <td>
+            <span class="badge {{#if available}}yes{{else}}no{{/if}}">{{availability available}}</span>
+          </td>
+          <td>
+            <button type="button" class="small" data-toggle="{{id}}" data-available="{{available}}">
+              Cambiar disponibilidad
+            </button>
+          </td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="7" class="empty">Todavía no hay servicios cargados.</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<section class="card">
+  <h3>Nuevo servicio</h3>
+  <form id="service-form">
+    <div class="form-grid">
+      <label>Nombre <input name="name" required></label>
+      <label>Descripción <input name="description" required></label>
+      <label>Duración (min) <input name="duration" type="number" min="1" required></label>
+      <label>Precio <input name="price" type="number" min="0" required></label>
+      <label>Categoría <input name="category" required></label>
+      <label class="checkbox"><input name="available" type="checkbox" checked> Disponible</label>
+    </div>
+    <button type="submit">Crear servicio</button>
+    <p id="form-message" class="form-message"></p>
+  </form>
+</section>
