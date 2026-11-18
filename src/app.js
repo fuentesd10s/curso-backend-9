@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/services', servicesRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/views', viewsRouter);
+app.get('/', (req, res) => res.redirect('/views/services'));
 app.use(notFound);
 app.use(errorHandler);
 
