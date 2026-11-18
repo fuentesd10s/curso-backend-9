@@ -6,6 +6,7 @@ import { hbsHelpers } from './views/helpers.js';
 import servicesRouter from './routes/services.router.js';
 import bookingsRouter from './routes/bookings.router.js';
 import viewsRouter from './routes/views.router.js';
+import { notFound } from './middlewares/notFound.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/services', servicesRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/views', viewsRouter);
+app.use(notFound);
 app.use(errorHandler);
 
 export default app;
